@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+    <div>
+        <h1>ড্যাশবোর্ড</h1>
+        <p class="subtitle">স্বাগতম, {{ current_user.username }}! 👋</p>
+    </div>
+    <a href="{{ url_for('translate_page') }}" class="btn-primary">✨ নতুন অনুবাদ</a>
+</div>
+
+<div class="cards">
+    <div class="card">
+        <div class="card-icon">📊</div>
+        <div class="card-number">{{ total }}</div>
+        <div class="card-label">মোট অনুবাদ</div>
+    </div>
+    <div class="card">
+        <div class="card-icon">🤖</div>
+        <div class="card-number">5</div>
+        <div class="card-label">প্রশিক্ষিত মডেল</div>
+    </div>
+    <div class="card">
+        <div class="card-icon">🗺️</div>
+        <div class="card-number">4</div>
+        <div class="card-label">উপভাষা</div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-head">
+        <h2>🕒 সাম্প্রতিক অনুবাদ</h2>
+    </div>
+    {% if history %}
+    <table class="history-table">
+        <thead>
+            <tr><th>ইনপুট</th><th>ফলাফল</th><th>উপভাষা</th><th>মডেল</th></tr>
+        </thead>
+        <tbody>
+            {% for h in history %}
+            <tr>
+                <td>{{ h.input_text }}</td>
+                <td>{{ h.output_text }}</td>
+                <td><span class="tag">{{ h.dialect }}</span></td>
+                <td><span class="tag tag-model">{{ h.model }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">📭 এখনো কোনো অনুবাদ করা হয়নি। "নতুন অনুবাদ" দিয়ে শুরু করুন!</p>
+    {% endif %}
+</div>
+{% endblock %}s

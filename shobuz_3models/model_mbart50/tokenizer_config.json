@@ -1,0 +1,22 @@
+{
+  "backend": "tokenizers",
+  "bos_token": "<s>",
+  "cls_token": "<s>",
+  "eos_token": "</s>",
+  "extra_special_tokens": [
+    "<sylheti>",
+    "<chittagonian>",
+    "<mymensingh>",
+    "<noakhali>"
+  ],
+  "is_local": false,
+  "mask_token": "<mask>",
+  "model_max_length": 1024,
+  "pad_token": "<pad>",
+  "sep_token": "</s>",
+  "src_lang": "en_XX",
+  "tgt_lang": "en_XX",
+  "tokenizer_class": "MBart50Tokenizer",
+  "unk_id": 0,
+  "unk_token": "<unk>"
+}

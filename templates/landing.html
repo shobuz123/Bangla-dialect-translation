@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বাংলা উপভাষা অনুবাদক</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="landing">
+        <div class="landing-hero">
+            <div class="hero-badge">🗣️ AI-চালিত অনুবাদ</div>
+            <h1 class="hero-title">বাংলা উপভাষা<br>অনুবাদক</h1>
+            <p class="hero-sub">
+                স্ট্যান্ডার্ড বাংলা থেকে ৪টি আঞ্চলিক উপভাষায় —
+                সিলেটি, চাটগাঁইয়া, ময়মনসিংহ, নোয়াখালী — দুই দিকেই অনুবাদ।
+                ৫টি প্রশিক্ষিত AI মডেল এবং RAG সংশোধন প্রযুক্তি।
+            </p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('login') }}" class="btn-hero btn-hero-primary">শুরু করুন →</a>
+                <a href="{{ url_for('register') }}" class="btn-hero btn-hero-ghost">অ্যাকাউন্ট তৈরি করুন</a>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>উচ্চ নির্ভুলতা</h3>
+                <p>NLLB মডেল BLEU স্কোর ৯১.৭৬ — গবেষণা-মানের অনুবাদ।</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>দুই-দিকে অনুবাদ</h3>
+                <p>স্ট্যান্ডার্ড → উপভাষা এবং উপভাষা → স্ট্যান্ডার্ড, উভয় দিকেই।</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>RAG সংশোধন</h3>
+                <p>মডেলের ভুল হলে ৩৯৩৩টি রেফারেন্স জোড়া থেকে স্বয়ংক্রিয় সংশোধন।</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>৫টি মডেল</h3>
+                <p>NLLB, mBART, BanglaT5, mT5, IndicBART — তুলনা করে সেরা ফল।</p>
+            </div>
+        </div>
+
+        <div class="landing-footer">
+            CSE445 NLP Capstone Project · বাংলা উপভাষা অনুবাদ
+        </div>
+    </div>
+</body>
+</html>

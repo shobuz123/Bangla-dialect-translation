@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>🔄 অনুবাদ</h1>
+<p class="subtitle">NLLB / mBART মডেল + RAG সংশোধন প্রযুক্তি</p>
+
+<div class="translate-grid">
+    <div class="panel">
+        <div class="panel-head">✍️ ইনপুট</div>
+        <form method="POST">
+            <label>বাক্য লিখুন</label>
+            <textarea name="text" rows="3" placeholder="যেমন: তুমি কেমন আছো?" required>{{ request.form.text or '' }}</textarea>
+            <button type="button" id="micBtn" class="voice-btn">🎤 কণ্ঠে বলুন</button>
+
+            <label>দিক</label>
+            <select name="direction">
+                <option value="dialect">Standard → Dialect</option>
+                <option value="standard">Dialect → Standard</option>
+            </select>
+
+            <label>উপভাষা</label>
+            <select name="dialect">
+                {% for d in dialects %}
+                <option value="{{ d }}">{{ d }}</option>
+                {% endfor %}
+            </select>
+
+            <label>মডেল</label>
+            <select name="model">
+                <option value="nllb">NLLB (BLEU 91.76)</option>
+                <option value="mbart">mBART (BLEU 76.03)</option>
+            </select>
+
+            <button type="submit" class="btn-primary">🚀 অনুবাদ করুন</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <div class="panel-head">✅ ফলাফল</div>
+        {% if result %}
+        <label>মডেলের অনুবাদ</label>
+        <div class="output-box">{{ result.model_output }}</div>
+
+        <label>চূড়ান্ত (RAG সংশোধিত)</label>
+        <div class="output-box output-final">{{ result.final }}</div>
+        <button type="button" class="voice-btn" onclick="speak('{{ result.final }}')">🔊 শুনুন</button>
+
+        <div class="rag-info">
+            🧠 RAG সংশোধন: <strong>{{ 'হ্যাঁ' if result.rag_used else 'না' }}</strong>
+            · মিল স্কোর: <strong>{{ result.score }}</strong>
+        </div>
+        {% else %}
+        <p class="empty">👈 বাম দিকে বাক্য লিখে "অনুবাদ করুন" চাপুন</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// ---------- Voice Input (কণ্ঠ → লেখা) ----------
+const micBtn = document.getElementById('micBtn');
+if (micBtn && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SR();
+    recognition.lang = 'bn-BD';
+    recognition.continuous = false;
+
+    micBtn.addEventListener('click', () => {
+        micBtn.textContent = '🎙️ শুনছি...';
+        micBtn.classList.add('listening');
+        recognition.start();
+    });
+
+    recognition.onresult = (e) => {
+        const text = e.results[0][0].transcript;
+        document.querySelector('textarea[name="text"]').value = text;
+    };
+    recognition.onend = () => {
+        micBtn.textContent = '🎤 কণ্ঠে বলুন';
+        micBtn.classList.remove('listening');
+    };
+    recognition.onerror = () => {
+        micBtn.textContent = '🎤 কণ্ঠে বলুন';
+        micBtn.classList.remove('listening');
+        alert('মাইক শুনতে পারেনি, আবার চেষ্টা করুন।');
+    };
+} else if (micBtn) {
+    micBtn.style.display = 'none';
+}
+
+// ---------- Voice Output (লেখা → কণ্ঠ) ----------
+function speak(text) {
+    if (!('speechSynthesis' in window)) {
+        alert('আপনার browser কণ্ঠ সমর্থন করে না।');
+        return;
+    }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+
+    const voices = window.speechSynthesis.getVoices();
+    // বাংলা খুঁজি, না পেলে হিন্দি, তাও না পেলে যেকোনো
+    let v = voices.find(x => x.lang.startsWith('bn'))
+         || voices.find(x => x.lang === 'hi-IN')
+         || voices[0];
+    if (v) { u.voice = v; u.lang = v.lang; }
+    u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+}
+
+// ভয়েস দেরিতে লোড হলে ধরে রাখার জন্য
+window.speechSynthesis.onvoiceschanged = () => {};
+</script>
+{% endblock %}

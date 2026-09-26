@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-box">
+    <h1>লগইন</h1>
+    <p class="subtitle">অ্যাকাউন্টে প্রবেশ করুন</p>
+    <form method="POST">
+        <label>ইউজারনেম</label>
+        <input type="text" name="username" required>
+        <label>পাসওয়ার্ড</label>
+        <input type="password" name="password" required>
+        <button type="submit" class="btn-primary">লগইন</button>
+    </form>
+    <p class="auth-link">অ্যাকাউন্ট নেই? <a href="{{ url_for('register') }}">রেজিস্টার করুন</a></p>
+</div>
+{% endblock %}
